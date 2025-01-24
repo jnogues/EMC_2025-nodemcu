@@ -1,4 +1,3 @@
-// Tester placa nodeMcu
 #include <Temperature_LM75_Derived.h>
 Generic_LM75_12Bit temperature;//12 bits 0.0625ºC 220ms
 
@@ -6,11 +5,10 @@ Generic_LM75_12Bit temperature;//12 bits 0.0625ºC 220ms
 #include "Tasker.h"
 Tasker tasker;
 
-#define FASTLED_ESP8266_RAW_PIN_ORDER
-#include <FastLED.h>
-#define NUM_LEDS 1
-#define DATA_PIN 15
-CRGB leds[NUM_LEDS];
+#include <Adafruit_NeoPixel.h>
+#define PIN  15
+#define NUMPIXELS 1
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() 
 {
@@ -19,6 +17,9 @@ void setup()
   delay(100);
   Wire.begin();// Inicia I2C
   Serial.println("Test placa 2025");
+
+  // Configurem Neopixel
+  pixels.begin();   
   
   // Encenem leds
   pinMode(16, OUTPUT);
@@ -30,27 +31,25 @@ void setup()
   pinMode(13, OUTPUT);
   digitalWrite(13 , HIGH);
 
-  // Configurem Neopixel  
-  FastLED.addLeds<WS2812B, DATA_PIN, RGB>(leds, NUM_LEDS);  // GRB ordering is typical
-  //FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);  // GRB ordering is assumed
+  
   // Benvinguda del Neopixel
+  
+  pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+  pixels.show(); 
   delay(1000);
-  leds[0].setRGB( 0,0,0);
-  FastLED.show(); 
-  delay(5000);
-  leds[0].setRGB( 255,0,0);
-  FastLED.show();
+  pixels.setPixelColor(0, pixels.Color(0, 255, 0));
+  pixels.show(); 
   delay(1000);
-  leds[0].setRGB( 0,255,0);
-  FastLED.show();
+  pixels.setPixelColor(0, pixels.Color(0, 0, 255));
+  pixels.show(); 
   delay(1000);
-  leds[0].setRGB( 0,0,255);
-  FastLED.show();
+  pixels.clear();
+  pixels.show(); 
   delay(1000);
   
   tasker.setInterval(intermitaLeds,1000);
   tasker.setInterval(mesuraTemperatura,2000);
-  tasker.setInterval(llumetesAleatories,3000);
+  tasker.setInterval(llumetesAleatories,1000);
   tasker.setInterval(valorAnalogic, 300);
 
 }
@@ -59,8 +58,6 @@ void loop()
 {
   tasker.loop();
 }
-
-
 
 // Tasques
 
@@ -82,11 +79,11 @@ void mesuraTemperatura()
 // Tasca 3
 void llumetesAleatories()
 {
-  byte red = random(0,100);
-  byte green = random(0,100);
-  byte blue = random(0,100);
-  leds[0].setRGB( red,green,blue); 
-  FastLED.show(); 
+  byte red = random(0,50);
+  byte green = random(0,50);
+  byte blue = random(0,50);
+  pixels.setPixelColor(0, pixels.Color(green, red, blue));
+  pixels.show(); 
 }
 
 // Tasca 4
