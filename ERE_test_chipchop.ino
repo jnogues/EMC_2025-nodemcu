@@ -1,5 +1,6 @@
 
 // ERE_test_chipchop.ino
+#include <Arduino.h>
 
 #include <ESP8266WiFi.h>
 #define CHIPCHOP_DEBUG true //set to false for production
