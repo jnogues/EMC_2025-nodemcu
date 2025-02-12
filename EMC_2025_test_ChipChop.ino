@@ -58,7 +58,7 @@ void setup()
     WiFi.begin("viscalaterra", "pitufito*");
     // Connectem amb el router...
     Serial.println("[WiFi] Connectant....");
-    int connRes = WiFi.waitForConnectResult(10000); //esperem 10 segons per donar temps a connectar al router
+    int connRes = WiFi.waitForConnectResult(20000); //esperem 20 segons per donar temps a connectar al router
     if(connRes != WL_CONNECTED)
     {
         Serial.print("[ERR ] MERDA!! No cennecto al router, resetejo!!!!!");
